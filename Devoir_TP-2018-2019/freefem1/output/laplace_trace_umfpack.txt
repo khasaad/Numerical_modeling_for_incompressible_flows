@@ -1,0 +1,55 @@
+Probleme de Laplace
+k = 0
+  Nombre de sommets par cote : 10
+  Nombre de sommets dans le maillage : 141
+  Nombre de triangles dans le maillage : 240
+  Nombre de degres de liberte : 141
+  Erreur L2 relative : 0.00401718
+  Erreur H1 relative : 0.133025
+  Temps CPU total : 0.021
+  min(u) : 8.65664e-063  max(u) : 0.0623534  min(ue) : 0  max(ue) : 0.0625
+k = 1
+  Nombre de sommets par cote : 20
+  Nombre de sommets dans le maillage : 517
+  Nombre de triangles dans le maillage : 952
+  Nombre de degres de liberte : 517
+  Erreur L2 relative : 0.000818783
+  Erreur H1 relative : 0.0638032
+  Temps CPU total : 0.017
+  min(u) : 2.4509e-063  max(u) : 0.0624712  min(ue) : 0  max(ue) : 0.0625
+k = 2
+  Nombre de sommets par cote : 40
+  Nombre de sommets dans le maillage : 1966
+  Nombre de triangles dans le maillage : 3770
+  Nombre de degres de liberte : 1966
+  Erreur L2 relative : 0.000195338
+  Erreur H1 relative : 0.0313677
+  Temps CPU total : 0.051
+  min(u) : 6.42053e-064  max(u) : 0.0624858  min(ue) : 0  max(ue) : 0.0625
+k = 3
+  Nombre de sommets par cote : 80
+  Nombre de sommets dans le maillage : 7682
+  Nombre de triangles dans le maillage : 15042
+  Nombre de degres de liberte : 7682
+  Erreur L2 relative : 4.59055e-005
+  Erreur H1 relative : 0.0154007
+  Temps CPU total : 0.204
+  min(u) : 1.6598e-064  max(u) : 0.0624962  min(ue) : 0  max(ue) : 0.0625
+k = 4
+  Nombre de sommets par cote : 160
+  Nombre de sommets dans le maillage : 30729
+  Nombre de triangles dans le maillage : 60816
+  Nombre de degres de liberte : 30729
+  Erreur L2 relative : 1.24105e-005
+  Erreur H1 relative : 0.00785495
+  Temps CPU total : 0.787
+  min(u) : 4.17528e-065  max(u) : 0.0624987  min(ue) : 0  max(ue) : 0.0625
+k = 5
+  Nombre de sommets par cote : 320
+  Nombre de sommets dans le maillage : 122564
+  Nombre de triangles dans le maillage : 243846
+  Nombre de degres de liberte : 122564
+  Erreur L2 relative : 2.76886e-006
+  Erreur H1 relative : 0.00382041
+  Temps CPU total : 3.811
+  min(u) : 1.04765e-065  max(u) : 0.0624997  min(ue) : 0  max(ue) : 0.0625

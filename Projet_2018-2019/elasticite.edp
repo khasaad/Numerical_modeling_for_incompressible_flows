@@ -1,0 +1,143 @@
+load "medit"
+include "cube.idp"
+load "msh3"
+
+real xmin = 0.;
+real xmax = 3.;
+real ymin = 0.;
+real ymax = 1.;
+real zmin = 0.;
+real zmax = 1.;
+
+
+mesh3 Th = cube(5,5,5, [x*5, y*3, z*3]);
+
+/*
+Omega = Cube
+On fixe Omega sur le coté gauche
+soit pour x = 0 et qqs y,z on a u1=u2=u3
+
+*/
+
+
+// real mu=1.,lambda=1.;
+real E = 21.5e4;
+real nu = 0.29;
+real mu = E/(2*(1.+nu));
+real lambda = E*nu/((1.+nu)*(1.-2.*nu));
+
+cout << "lambda = " << lambda << ", mu = " << mu << endl;
+
+fespace VVh(Th,[P2,P2,P2]);
+
+
+//cout << << endl;
+
+VVh [u1, u2, u3];
+VVh [v1, v2, v3];
+
+// real gravity = -0.05;
+
+func f1 = -4*lambda -6*mu;
+func f2 = 0;
+func f3 = 0;
+
+macro f [f1, f2, f3] //
+
+// Droite (0, -1, 0)
+func g11 = -mu*y;
+func g12 = -2*x*(mu + 2*lambda);
+func g13 = 0;
+
+// (-1, 0, 0)
+// func g21 = -4*xmin*(mu + lambda);
+// func g22 = -mu*y;
+// func g23 = -mu*z;
+
+// Face (1, 0, 0)
+func g21 = 4*x*(mu + lambda);
+func g22 = mu*y;
+func g23 = mu*z;
+
+// Gauche (0, 1, 0)
+func g31 = mu*y;
+func g32 = 2*x*(mu + 2*lambda);
+func g33 = 0;
+
+// Bas (0, 0, -1)
+func g41 = -mu*z;
+func g42 = 0;
+func g43 = -2*x*(mu + 2*lambda);
+
+// Haut (0, 0, 1)
+func g51 = mu*z;
+func g52 = 0;
+func g53 = 2*x*(mu + 2*lambda);
+
+macro u [u1, u2, u3] //
+macro v [v1, v2, v3] //
+
+macro epsilon(u)  [dx(u[0]), dy(u[1]), dz(u[2]), (dz(u[1])+dy(u[2]))/sqrt(2), (dz(u[0])+dx(u[2]))/sqrt(2), (dy(u[0])+dx(u[1]))/sqrt(2)] // EOM
+macro div(u) ( dx(u[0])+dy(u[1])+dz(u[2]) ) // EOM
+
+//macro f [0, 0, gravity] //
+
+macro g1 [g11, g12, g13] // [0, -1, 0] or (-1, 0, 0)
+macro g2 [g21, g22, g23] // [1, 0, 0]
+macro g3 [g31, g32, g33] // [0, 1, 0]
+macro g4 [g41, g42, g43] // [0, 0, -1]
+macro g5 [g51, g52, g53] // [0, 0, 1] 
+
+
+solve elasticity(u, v) =
+        int3d(Th)( 2*mu* (epsilon(u)'*epsilon(v) ) + lambda* div(u)*div(v) )
+	- int3d(Th)(f'*v)
+	- int2d(Th, 1)(g1'*v)
+	- int2d(Th, 2)(g2'*v)
+	- int2d(Th, 3)(g3'*v)
+	- int2d(Th, 5)(g4'*v)
+	- int2d(Th, 6)(g5'*v)
+	+ on (4, u1=0, u2=0, u3=0);
+
+// exact solutions
+VVh [u1ex, u2ex, u3ex] = [x*x, x*y, x*z];
+
+macro uex [u1ex, u2ex, u3ex] //
+
+//plot(sigma,fill=1,cmm="Constraints",wait=1);
+
+// Déformation de Omega
+// real dmax= u1ex[].max;
+// real coef= 2./dmax; // coef d'amplification
+
+real coef = 0.1;
+cout << "coef: " << coef << endl;
+int[int] ref2=[1, 0, 2, 0]; 
+// int[int] ref2=[0, 1, 0, 2]; 
+
+mesh3 Shex = movemesh3(Th,transfo=[x+coef*u1ex, y+coef*u2ex, z+coef*u3ex]);
+//mesh3 Shex = movemesh3(Th,transfo=[x, y, z+coef*u3ex]);
+Shex = change(Shex, label=ref2);
+plot(Shex, cmm="Solution Exacte",wait=1);
+
+real dmax2 = u1[].max;
+real coef2 = 1./dmax2; // coef d'amplification
+cout << "dmax2: " << dmax2 << endl;
+//cout << "coef2: " << coef2 << endl;
+
+mesh3 Shap = movemesh3(Th, transfo=[x+coef*u1, y+coef*u2, z+coef*u3]);
+//mesh3 Shap = movemesh3(Th, transfo=[x, y, z+coef2*u3]);
+Shap = change(Shap, label=ref2);
+plot(Shap, cmm="Solution Approchee", wait=1);
+
+
+
+// Calcul d'erreur L2 pour le probleme 
+
+real erreurL2u1 = int3d(Th) ( ( epsilon(u1ex)-epsilon(u1) )^2 ) ;
+real erreurL2u2 = int3d(Th) ( ( u2ex-u2 )^2 ) ;
+real erreurL2u3 = int3d(Th) ( ( u3ex-u3 )^2 ) ;
+
+cout << "erreur norme L2: " << erreurL2u1 <<endl;
+cout << "erreur norme L2: " << erreurL2u2 <<endl;
+cout << "erreur norme L2: " << erreurL2u3 <<endl;

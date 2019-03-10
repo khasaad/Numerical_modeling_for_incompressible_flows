@@ -1,0 +1,83 @@
+load "medit"
+include "cube.idp"
+load "msh3"
+
+real xmin = 0.;
+real xmax = 10.;
+real ymin = 0.;
+real ymax = 3.;
+real zmin = 0.;
+real zmax = 3.;
+
+
+mesh3 Th = cube(10,10,10, [x*xmax, y*ymax, z*ymax]);
+
+/*
+Omega = Cube
+On fixe Omega sur le coté gauche
+soit pour x = 0 et qqs y,z on a u1=u2=u3
+
+*/
+
+real E = 21.5e4;
+real nu = 0.29;
+real mu = E/(2*(1.+nu));
+real lambda = E*nu/((1.+nu)*(1.-2.*nu));
+
+cout << "lambda = " << lambda << ", mu = " << mu << endl;
+
+fespace VVh(Th,[P1,P1,P1]);
+
+
+//cout << << endl;
+
+VVh [u1, u2, u3];
+VVh [v1, v2, v3];
+
+real gravity = -0.05;
+
+func f1 = 0;
+func f2 = 0;
+func f3 = gravity;
+
+macro f [f1, f2, f3] //
+
+macro u [u1, u2, u3] //
+macro v [v1, v2, v3] //
+
+macro epsilon(u)  [dx(u[0]), dy(u[1]), dz(u[2]), (dz(u[1])+dy(u[2]))/sqrt(2), (dz(u[0])+dx(u[2]))/sqrt(2), (dy(u[0])+dx(u[1]))/sqrt(2)] // EOM
+macro div(u) ( dx(u[0])+dy(u[1])+dz(u[2]) ) // EOM
+
+
+
+macro g1 [0, 0, 0] // [0, -1, 0]
+macro g2 [0, 0, 0] // [1, 0, 0]
+macro g3 [0, 0, 0] // [0, 1, 0]
+macro g4 [0, 0, 0] // [0, 0, -1]
+macro g5 [0, 0, 0] // [0, 0, 1] 
+
+
+solve elasticity(u, v) =
+        int3d(Th)( 2*mu* (epsilon(u)'*epsilon(v) ) + lambda* div(u)*div(v) )
+	- int3d(Th)(f'*v)
+	- int2d(Th, 1)(g1'*v)
+	- int2d(Th, 2)(g2'*v)
+	- int2d(Th, 3)(g3'*v)
+	- int2d(Th, 5)(g4'*v)
+	- int2d(Th, 6)(g5'*v)
+	+ on (4, u1=0, u2=0, u3=0);
+
+int[int] ref2=[0, 1, 0, 2]; 
+
+real dmax2 = u1[].max;
+real coef2 = 1./dmax2; // coef d'amplification
+cout << "dmax2: " << dmax2 << endl;
+//cout << "coef2: " << coef2 << endl;
+
+mesh3 Shap = movemesh3(Th, transfo=[x+coef2*u1, y+coef2*u2, z+coef2*u3]);
+Shap = change(Shap, label=ref2);
+plot(Th, Shap, cmm="Solution Approchee", wait=1);
+
+// plot(u1, wait=1);
+// plot(u2, wait=1);
+// plot(u3, wait=1);

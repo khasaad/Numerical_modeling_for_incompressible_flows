@@ -1,0 +1,119 @@
+load "medit"
+include "cube.idp"
+
+
+real xmin=0.;
+real ymin=0.;
+real zmin=0.;
+real xmax=5.;
+real ymax=3.;
+real zmax=3.;
+
+int n = 7;
+
+mesh3 Th = cube(n,n,n, [x*xmax, y*ymax, z*zmax]);
+
+/*
+Omega = Cube
+On fixe Omega sur le coté gauche
+donc pour x = 0 et qqs y,z on a u1=u2=u3=0
+
+*/
+
+real E = 21.5e4;
+real nu = 0.29;
+real mu = E/(2*(1+nu));
+real lambda = E*nu/((1+nu)*(1-2*nu));
+
+cout << "lambda = " << lambda << ", mu = " << mu << endl;
+
+fespace VVh(Th,[P2,P2,P2]);
+
+
+//cout << << endl;
+
+VVh [u1, u2, u3], [v1, v2, v3];
+
+real gravity = -0.05;
+
+func f1 = -(2*mu+lambda)*(-sin(x)*(x*x+y*y+z*z-2) + 4*x*cos(x)) - 2*lambda*(y-z*sin(x)) -2*mu*(sin(x)*(-z+2)+y);
+func f2 = -2*mu*(cos(x)*y+4*x) -(2*mu+lambda)*2*x ;
+func f3 = -mu*(-cos(x)*(x*x+y*y+z*z-2*z)-4*x*sin(x)) -8*mu*(cos(x)-1) -(2*lambda)*(cos(x)*(1+z)-1);
+
+func g11 = mu*(3*x*x + ymin*ymin + z*z + 2*ymin*sin(x));
+func g12 = (2*mu+lambda)*(2*x*ymin) + lambda*(cos(x)*(x*x+ymin*ymin+z*z)+2*x*sin(x) + (cos(x)-1)*2*z);
+func g13 = mu*(2*ymin*(cos(x)-1) + 2*x*z);
+
+func g21 = (2*mu+lambda)*(cos(x)*(xmax*xmax+y*y+z*z)+2*xmax*sin(xmax))+ lambda*(2*xmax*y+(cos(xmax)-1)*2*z);
+func g22 = mu*(3*xmax*xmax + y*y + z*z + 2*y*sin(xmax));
+func g23 = mu*(-sin(xmax)*(xmax*xmax+y*y+z*z) + 2*xmax*(cos(xmax)-1) + 2*z*sin(xmax));
+
+func g31 = mu*(3*x*x + ymax*ymax + z*z + 2*ymax*sin(x));
+func g32 = (2*mu+lambda)*(2*x*ymax) + lambda*(cos(x)*(x*x+ymax*ymax+z*z)+2*x*sin(x) + (cos(x)-1)*2*z);
+func g33 = mu*(2*ymax*(cos(x)-1) + 2*x*z);
+
+func g41 = mu*(-sin(x)*(x*x+y*y+zmin*zmin) + 2*x*(cos(x)-1) + 2*zmin*sin(x));
+func g42 = mu*(2*y*(cos(x)-1) + 2*x*zmin);
+func g43 = (2*mu+lambda)*((cos(x)-1)*2*zmin) + lambda*(cos(x)*(x*x+y*y+zmin*zmin)+2*x*sin(x) + 2*x*y);
+
+func g51 = mu*(-sin(x)*(x*x+y*y+zmax*zmax) + 2*x*(cos(x)-1) + 2*zmax*sin(x));
+func g52 = mu*(2*y*(cos(x)-1) + 2*x*zmax);
+func g53 = (2*mu+lambda)*((cos(x)-1)*2*zmax) + lambda*(cos(x)*(x*x+y*y+zmax*zmax)+2*x*sin(x) + 2*x*y);
+
+macro u [u1, u2, u3] //
+macro v [v1, v2, v3] //
+
+macro epsilon(u) [dx(u[0]), dy(u[1]), dz(u[2]), (dz(u[1])+dy(u[2]))/sqrt(2), (dz(u[0])+dx(u[2]))/sqrt(2), (dy(u[0])+dx(u[1]))/sqrt(2)] // EOM
+macro div(u) ( dx(u[0])+dy(u[1])+dz(u[2]) ) // EOM
+
+macro f [f1, f2, f3] //
+
+macro g1 [-g11, -g12, -g13] // pour n = [0, -1, 0]
+macro g2 [g21, g22, g23] // pour n = [1, 0, 0] 
+macro g3 [g31, g32, g33] // pour n = [0, 1, 0] 
+macro g4 [-g41, -g42, -g43] // pour n = [0, 0, -1] 
+macro g5 [g51, g52, g53] // pour n = [0, 0, 1]
+
+
+solve elasticity(u, v, solver=CG) =
+      int3d(Th)( 2*mu* (epsilon(u)'*epsilon(v) ) + lambda* div(u)*div(v) )
+	- int3d(Th)(f'*v)
+	- int2d(Th, 1)(g1'*v)
+	- int2d(Th, 2)(g2'*v)
+	- int2d(Th, 3)(g3'*v)
+	- int2d(Th, 5)(g4'*v)
+	- int2d(Th, 6)(g5'*v)
+	+ on (4, u1=0, u2=0, u3=0);
+
+
+// exact solutions
+VVh [u1ex, u2ex, u3ex] = [sin(x)*(x*x+y*y+z*z), x*(x*x+y*y+z*z), (cos(x)-1)*(x*x+y*y+z*z)];
+macro uex [u1ex, u2ex, u3ex]//
+
+// Déformation de Omega
+real dmax= u1ex[].max;
+real coef= 2/dmax; // coef d'amplification
+cout << "coef: " << coef << endl;
+int[int] ref2=[1, 0, 2, 0]; 
+
+mesh3 Shex = movemesh3(Th, transfo=[x+coef*u1ex, y+coef*u2ex, z+coef*u3ex], label=ref2);
+Shex = change(Shex, label=ref2);
+plot(Shex, cmm="Deformed configuration",wait=1);
+
+// elasticity;
+real dmax2 = u1[].max;
+real coef2 = 2./dmax2; // coef d'amplification
+// cout << "coef2: " << coef2 << endl;
+
+mesh3 Shap = movemesh3(Th, transfo=[x+coef2*u1, y+coef2*u2, z+coef2*u3], label=ref2);
+Shap = change(Shap, label=ref2);
+plot(Shap, cmm="Deformed configuration",wait=1);
+
+plot(Shap, Shex, cmm="Deformed configuration", wait=1);
+
+
+// norme L2
+cout << "error L2 u1= " << sqrt( int3d(Shap)((u1ex-u1)^2) )<< endl;
+cout << "error L2 u2= " << sqrt( int3d(Shap)((u2 - u2ex)^2) )<< endl;
+cout << "error L2 u3= " << sqrt( int3d(Shap)((u3 - u3ex)^2) )<< endl;
+

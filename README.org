@@ -1,0 +1,85 @@
+#+TITLE: Simulation numérique par éléments finis avancés / Méthodes numériques pour les écoulements incompressibles
+#+AUTHOR: Yves Coudière
+#+DATE: [2018-10-08 lun.]
+#+EMAIL: yves.coudiere at u-bordeaux.fr [05 24 57 40 36]
+#+LANGUAGE: fr
+
+* Proposition nouveau syllabus
+cf les emails de discusssion: [[mu4e:msgid:c659e82d-ad41-9455-08da-053a16405886@math.u-bordeaux.fr][amélioration de la filière CHP]], [[mu4e:msgid:8A866553-25EB-460B-B4EB-D02B82AE50EF@math.u-bordeaux.fr][Re: amélioration
+de la filière CHP]] et [[mu4e:msgid:8960b83e-1840-5970-9adb-f4ad373c5d1f@enseirb-matmeca.fr][Re: amélioration de la filière CHP]]
+** Compétences
+ - Savoir construire une formulation variationnelle pour un problème de
+   mécanique des milieus continus, les fluides (Stokes) ou les solides
+   déformables (élasticité).
+ - Connaitre quelques éléments finis classiques en dimension 2 et 3 (Lagrange
+   Pk, isoparamétriques Qk, élément bulles pour Stokes...) et leurs propriétés
+   d'approximation, savoir choisir l'élément en fonction de l'application.
+ - Comprendre l'implémentation d'un code éléments finis sur maillage non
+   structuré.
+** Contenu du cours
+ 1. Formulations variationnelles en mécanique des milieus continus,
+   - équations de Stokes
+   - élasticité linéaire
+ 2. Méthode des éléments finis
+   - rappels sur le principe de la méthode (méthode de Galerkin, définition d'un
+     élément unisolvant)
+   - maillages non structurés et construction des espaces d'approximation
+   - principe général de la construction de systèmes linéaires
+ 3. Mise en oeuvre
+   - représentation des maillages
+   - principe des procédures d'assemblage des matrices
+   - calcul des matrices élémentaires par passage à l'élément de référence
+** Organisation pratique
+- Première partie :: cours "magistraux" permettant de rappeler
+     brièvement les 3 points ci-dessus.
+- Deuxième partie :: réalisation d'un projet qui sera dédié, soit à la
+     programmation complète d'un solveur, soit à l'utilisation de
+     Freefem++ pour la résolution et l'exploration d'un problème
+     complexe, soit à une étude théorique d'analyse numérique.
+* Organisation pratique, évaluation
+** Codes
+ - Matmeca : EM9AN312
+ - UB : ??
+** Temps de travail (accréditation)
+ - 24h CM -> 36 h eqTD  
+** Évaluation
+ - Session 1 : Contrôle continu - Coef. 1 (évaluation sur projets)
+ - Session 2 : Pas de 2e session
+
+Les épreuves terminales écrites pourront être remplacées en seconde
+session par un oral en cas d'effectif faible
+** EdT
+https://ade.bordeaux-inp.fr/direct/index.jsp?displayConfName=web&login=visu&projectId=2
+
+Séances de 3h de 14h à 17h. Il en faut 8.
+| 09/10/2018 | 1 |    |                                                |
+| 30/10/2018 | 2 |    |                                                |
+| 06/11/2018 | 3 | E1 | 1.1 [Gaëtan], 4.1 [Romuald], 6.1 [Corisande]   |
+| 13/11/2018 | 4 | E2 | 3.1 [Louis S] 6.2 [Manon] 2.2 [Fanny]          |
+| 20/11/2018 | 5 | E3 | 5.2 [Antoine D] 5.3 [Baptiste] 1.3 [Antoine H] |
+| 27/11/2018 | 6 | E4 | 4.3 [Sankoun] 3.2 [Marius] 2.3 [Antoine M]     |
+| 11/12/2018 | 7 | E5 |                                                |
+| janvier    | 8 | E6 |                                                |
+Remise des compte-rendus mi-janvier ou fin-janvier.
+
+** Travail
+- TP1 à faire individuellement (séance du 30/10), compte rendu à
+  remettre avant la fin de la semaine
+  (yves.coudiere@u-bordeaux.fr). Voir le répertoire [[file:./freefem][./freefem]], l'énoncé
+  se trouve dans le fichier [[file:./freefem/tp.pdf][./freefem/tp.pdf]].
+- Projets à répartir par groupes [[file:./projets.pdf][projets.pdf]].
+- Chaque projet fait l'objet 
+    + d'un ensemble d'exposés à donner au cours du semestre 
+    + d'un compte rendu global qui regroupe les éléments des exposés et
+      les éléments complémentaires éventuels, à rendre en fin de semestre.
+
+** Groupes
+|-----------------+---------------------+------------------+----------------------+-----------------+--------------------|
+| 1 Stokes FF++   | 2 Stokes Qk         | 3 NS FF++        | 4 Élasticité FF++    | 5 DG            | 6 Timoshenko       |
+|-----------------+---------------------+------------------+----------------------+-----------------+--------------------|
+| Gaëtan [1.1] E1 | Antoine H [1.3] E3  | Marius           | Sankoun [4.3]        | Ilyes           | Corisande [6.1] E1 |
+| Steven [1.6]    | Antoine [2.3]       | Benjamin         | Romuald [4.1,4.2] E1 | Antoine D [5.2] | Juliette [6.3]     |
+|                 | Fanny [2.2] E2      | Louis S [3.1] E2 | Saad [4.4]           | Louis           | Manon [6.2] E2     |
+|                 | Odelin [1.4 = 2.5]  |                  |                      | Baptiste [5.3]  |                    |
+|                 |                     | [3.2,3.4]        |                      | [5.4, 5.6]      |                    |
+|-----------------+---------------------+------------------+----------------------+-----------------+--------------------|

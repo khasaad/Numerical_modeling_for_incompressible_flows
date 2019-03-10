@@ -1,0 +1,28 @@
+-- FreeFem++ v  3.610001 (date jeu. 12 juil. 2018 15:05:23)
+ Load: lg_fem lg_mesh lg_mesh3 eigenvalue
+    1 :
+    2 : // Domaine de calcul défini par ses bords (le domaine est à gauche du
+    3 : // bord).
+    4 : border Gamma1(t=0,1){x=t;y=0; label=1;};
+    5 : border Gamma2(t=0,1){x=1;y=t; label=2;};
+    6 : border Gamma3(t=0,1){x=1-t;y=1; label=3;};
+    7 : border Gamma4(t=0,1){x=0;y=1-t; label=4;};
+    8 :
+    9 : // Nombre de divisions par côté du domaine de calcul
+   10 : int n = 10;
+   11 :
+   12 : // Construction d'un maillage non structuré (triangles) avec n division
+   13 : // par côté.
+   14 : mesh Th = buildmesh(Gamma1(n)+Gamma2(n)+Gamma3(n)+Gamma4(n));
+   15 :
+   16 : // Affichage du maillage et sortie dans un fichier
+   17 : plot(Th,wait=true,ps="exple.eps");
+   18 :
+   19 :  sizestack + 1024 =1328  ( 304 )
+ 
+  --  mesh:  Nb of Triangles =    240, Nb of Vertices 141
+times: compile 0.032s, execution 0.009s,  mpirank:0
+ ######## We forget of deleting   18 Nb pointer,   0Bytes  ,  mpirank 0, memory leak =0
+ CodeAlloc : nb ptr  2827,  size :377624 mpirank: 0
+Ok: Normal End
+ try getConsole C:\Users\PC\Desktop\MN&CHP_Universit�-De-Bordeaux\Projet_MNEIncompresible\AN312-master\AN312-master\free@�fem\exple.edp

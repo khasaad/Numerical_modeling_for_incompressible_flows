@@ -1,0 +1,41 @@
+Probleme de Laplace
+epsilon = 0.1
+k = 6
+  Nombre de sommets par cote : 640
+  Nombre de sommets dans le maillage : 493942
+  Nombre de triangles dans le maillage : 985322
+  Nombre de degres de liberte : 493942
+  Erreur L2 relative : 2.00002
+  Erreur H1 relative : 1.99998
+  Temps CPU total : 30.5198
+  min(u) : -0.249209  max(u) : 0.250742  min(ue) : -0.25  max(ue) : 0.25
+epsilon = 1e-05
+k = 6
+  Nombre de sommets par cote : 640
+  Nombre de sommets dans le maillage : 493942
+  Nombre de triangles dans le maillage : 985322
+  Nombre de degres de liberte : 493942
+  Erreur L2 relative : 2
+  Erreur H1 relative : 2
+  Temps CPU total : 48.8474
+  min(u) : -0.250002  max(u) : 0.249998  min(ue) : -0.25  max(ue) : 0.25
+epsilon = 1e-10
+k = 6
+  Nombre de sommets par cote : 640
+  Nombre de sommets dans le maillage : 493942
+  Nombre de triangles dans le maillage : 985322
+  Nombre de degres de liberte : 493942
+  Erreur L2 relative : 2
+  Erreur H1 relative : 2
+  Temps CPU total : 60.4094
+  min(u) : -0.250002  max(u) : 0.249998  min(ue) : -0.25  max(ue) : 0.25
+epsilon = 1e-13
+k = 6
+  Nombre de sommets par cote : 640
+  Nombre de sommets dans le maillage : 493942
+  Nombre de triangles dans le maillage : 985322
+  Nombre de degres de liberte : 493942
+  Erreur L2 relative : 2
+  Erreur H1 relative : 2
+  Temps CPU total : 68.121
+  min(u) : -0.250002  max(u) : 0.249998  min(ue) : -0.25  max(ue) : 0.25

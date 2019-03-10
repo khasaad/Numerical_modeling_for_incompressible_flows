@@ -1,0 +1,11 @@
+# Resolution de -Laplacien(u) = f avec u = 0 au bord
+# sur le carre [0,1]x[0,1] en elements finis P1 Lagrange
+# sur une suite de maillages
+# et pour une solution analytique quadratique en x et y
+# pas h, erreur L^2 relative, erreur relative L^2 sur le gradient, temps CPU
+0.1  1.99877  2.00639  0.005767
+0.05  1.99962  2.00183  0.021495
+0.025  1.9999  2.00044  0.109082
+0.0125  1.99998  2.00012  0.360249
+0.00625  1.99999  2.00003  1.43119
+0.003125  2  2.00001  6.5825

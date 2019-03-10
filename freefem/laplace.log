@@ -1,0 +1,97 @@
+-- FreeFem++ v  3.610001 (date jeu. 12 juil. 2018 15:05:23)
+ Load: lg_fem lg_mesh lg_mesh3 eigenvalue
+    1 : //verbosity 0;
+    2 :
+    3 : // Trace de l'éxécution dans un fichier
+    4 : ofstream tfile("output/laplace_trace_umfpack.txt");
+    5 : // Fichier de sortie sous forme de tableau pour tracé gnuplot
+    6 : ofstream gfile("output/laplace_errors_umfpack.txt");
+    7 :
+    8 : tfile << "Probleme de Laplace" << endl;
+    9 :
+   10 : gfile << "# Resolution de -Laplacien(u) = f avec u = 0 au b
+  ... : ord" << endl;
+   11 : gfile << "# sur le carre [0,1]x[0,1] en elements finis P1 L
+  ... : agrange" << endl;
+   12 : gfile << "# sur une suite de maillages" << endl;
+   13 : gfile << "# et pour une solution analytique quadratique en
+  ... : x et y" << endl;
+   14 :
+   15 : gfile << "# pas h, erreur L^2 relative, erreur relative L^2
+  ... :  sur le gradient, temps CPU" << endl;
+   16 :
+   17 : // Définition des bord du domaine de calcul
+   18 : border Gamma1(t=0,1) {x=t; y=0;};
+   19 : border Gamma2(t=0,1) {x=1; y=t;};
+   20 : border Gamma3(t=0,1) {x=1-t; y=1;};
+   21 : border Gamma4(t=0,1) {x=0; y=1-t;};
+   22 :
+   23 : // Boucle sur une famille de maillages de plus en plus fins
+   24 : for (int k=0;k<6;++k) // Pour k=7, ça devient trop gros
+   25 :   {
+   26 :     // Construction du maillage
+   27 :     int n = 10*2^k; // Nombre de points par côté
+   28 :     real t1 = clock(); // Pour mesure du temps cpu
+   29 :     mesh Th = buildmesh(Gamma1(n)+Gamma2(n)+Gamma3(n)+Gamma4(n));
+   30 :
+   31 :     tfile << "k = " << k << endl;
+   32 :     tfile << "  Nombre de sommets par cote : " << n << endl;
+   33 :     tfile << "  Nombre de sommets dans le maillage : " << Th.nv << endl;
+   34 :     tfile << "  Nombre de triangles dans le maillage : " << Th.nt << endl;
+   35 :
+   36 :     // Affichage et sortie fichierdu maillage seul
+   37 :     //plot(Gamma1(n)+Gamma2(n)+Gamma3(n)+Gamma4(n));
+   38 :     //plot(Th, wait=1, ps="laplace.eps");
+   39 :
+   40 :     // Définition de l'espace de discrétisation. Ici on discrétise
+   41 :     // V=H^1_0(\Omega) avec des éléments finis P1-Lagrange
+   42 :     fespace Vh(Th,P1);
+   43 :     tfile << "  Nombre de degres de liberte : " << Vh.ndof << endl;
+   44 :
+   45 :     cout << "*** k = " << k << " --> n = " << n << " , #DOf = " << Vh.ndof << " ***" << endl;
+   46 :
+   47 :     // Définition de la formulation variationnelle dans Vh
+   48 :
+   49 :     // On a besoin de 2 fonctions u et v dans Vh
+   50 :     Vh u,v;
+   51 :     // D'une fonction definie de manière analytique (pour le second membre)
+   52 :     func f = 2*(x*(1-x)+y*(1-y));
+   53 :     // Qui s'annule bien au bord du domaine et dont la solution (de
+   54 :     // -Laplacien(u)=f) est $u(x,y) = x(1-x)y(1-y).
+   55 :
+   56 :     // Voici finalement notre problème, avec son solveur linéaire
+   57 :     problem laplace(u,v,solver=UMFPACK) = int2d(Th)( dx(u)*dx(v) + dy(u)*dy(v) )
+   58 :       - int2d(Th)( f*v ) + on(Gamma1,Gamma2,Gamma3,Gamma4,u=0);
+   59 :
+   60 :     // Résolution du système linéaire
+   61 :     laplace;
+   62 :
+   63 :     // Visualisation de la solution
+   64 :     //plot(u, fill=true,value=true,boundary=true,wait=true);
+   65 :
+   66 :     // Solution exacte projetee dans Vh
+   67 :     Vh ue;
+   68 :     ue = x*(1-x)*y*(1-y); // Expression de la solution exacte
+   69 :
+   70 :     // Calcul des erreurs
+   71 :     real normeL2, errL2;
+   72 :     normeL2 = sqrt( int2d(Th) ( (ue)^2 ) );
+   73 :     errL2 = sqrt( int2d(Th) ( (u-ue)^2 ) );
+   74 :
+   75 :     real t2 = clock(); // Pour mesure du temps cpu
+   76 :
+   77 :     tfile << "  Erreur L2 relative : " << errL2/normeL2 << endl;
+   78 :     tfile << "  Temps CPU total : " << t2-t1 << endl;
+   79 :
+   80 :     gfile << 1./n << "  " << errL2/normeL2 << "  " << t2-t1 << endl;
+   81 :   }
+   82 :  sizestack + 1024 =3936  ( 2912 )
+ 
+ Error openning file output/laplace_trace_umfpack.txt
+  current line = 4
+Exec error : Error openning file
+   -- number :1
+Exec error : Error openning file
+   -- number :1
+ err code 7 ,  mpirank 0
+ try getConsole C:\Users\PC\Desktop\MN&CHP_Universit�-De-Bordeaux\Projet_MNEIncompresible\AN312-master\AN312-master\free�(gfem\laplace.edp

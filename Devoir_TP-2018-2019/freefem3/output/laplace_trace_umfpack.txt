@@ -1,0 +1,55 @@
+Probleme de Laplace
+k = 0
+  Nombre de sommets par cote : 10
+  Nombre de sommets dans le maillage : 141
+  Nombre de triangles dans le maillage : 240
+  Nombre de degres de liberte : 141
+  Erreur L2 relative : 1.99877
+  Erreur H1 relative : 2.00639
+  Temps CPU total : 0.005767
+  min(u) : -0.250697  max(u) : 0.248208  min(ue) : -0.25  max(ue) : 0.25
+k = 1
+  Nombre de sommets par cote : 20
+  Nombre de sommets dans le maillage : 517
+  Nombre de triangles dans le maillage : 952
+  Nombre de degres de liberte : 517
+  Erreur L2 relative : 1.99962
+  Erreur H1 relative : 2.00183
+  Temps CPU total : 0.021495
+  min(u) : -0.250316  max(u) : 0.250084  min(ue) : -0.25  max(ue) : 0.25
+k = 2
+  Nombre de sommets par cote : 40
+  Nombre de sommets dans le maillage : 1978
+  Nombre de triangles dans le maillage : 3794
+  Nombre de degres de liberte : 1978
+  Erreur L2 relative : 1.9999
+  Erreur H1 relative : 2.00044
+  Temps CPU total : 0.109082
+  min(u) : -0.250188  max(u) : 0.249807  min(ue) : -0.25  max(ue) : 0.25
+k = 3
+  Nombre de sommets par cote : 80
+  Nombre de sommets dans le maillage : 7662
+  Nombre de triangles dans le maillage : 15002
+  Nombre de degres de liberte : 7662
+  Erreur L2 relative : 1.99998
+  Erreur H1 relative : 2.00012
+  Temps CPU total : 0.360249
+  min(u) : -0.250057  max(u) : 0.249946  min(ue) : -0.25  max(ue) : 0.25
+k = 4
+  Nombre de sommets par cote : 160
+  Nombre de sommets dans le maillage : 30534
+  Nombre de triangles dans le maillage : 60426
+  Nombre de degres de liberte : 30534
+  Erreur L2 relative : 1.99999
+  Erreur H1 relative : 2.00003
+  Temps CPU total : 1.43119
+  min(u) : -0.250023  max(u) : 0.249983  min(ue) : -0.25  max(ue) : 0.25
+k = 5
+  Nombre de sommets par cote : 320
+  Nombre de sommets dans le maillage : 121885
+  Nombre de triangles dans le maillage : 242488
+  Nombre de degres de liberte : 121885
+  Erreur L2 relative : 2
+  Erreur H1 relative : 2.00001
+  Temps CPU total : 6.5825
+  min(u) : -0.250006  max(u) : 0.249995  min(ue) : -0.25  max(ue) : 0.25

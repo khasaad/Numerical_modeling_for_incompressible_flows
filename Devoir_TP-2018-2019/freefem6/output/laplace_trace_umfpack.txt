@@ -1,0 +1,14 @@
+Probleme de Laplace
+  Nombre de sommets par cote : 320
+  Nombre de sommets dans le maillage : 122564
+  Nombre de triangles dans le maillage : 243846
+  Nombre de degres de liberte : 122564
+r = 1
+  Erreur L2 relative : 2.03261e-005
+  Erreur H1 relative : 0.00174599
+  Temps CPU total : 3.659
+  min(u) : -1.00004  max(u) : 0.99997  min(ue) : -1  max(ue) : 1
+  Nombre de sommets par cote : 320
+  Nombre de sommets dans le maillage : 122564
+  Nombre de triangles dans le maillage : 243846
+  Nombre de degres de liberte : 
